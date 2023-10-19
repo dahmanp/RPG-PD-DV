@@ -33,6 +33,21 @@ public class PlayerController : MonoBehaviourPun
     // local player
     public static PlayerController me;
 
+    [PunRPC]
+    public void Initialize(Player player)
+    {
+        id = player.ActorNumber;
+        photonPlayer = player;
+
+        if (player.IsLocal)
+            me = this;
+        else
+            rig.isKinematic = true;
+
+        GameManager.instance.players[id - 1] = this;
+        headerInfo.Initialize(player.NickName, maxHp);
+    }
+
     void Update()
     {
         if (!photonView.IsMine)
@@ -113,23 +128,6 @@ public class PlayerController : MonoBehaviourPun
         rig.isKinematic = false;
         // update health bar
         headerInfo.photonView.RPC("UpdateHealthBar", RpcTarget.All, curHp);
-    }
-
-    [PunRPC]
-    public void Initialize(Player player)
-    {
-        id = player.ActorNumber;
-        photonPlayer = player;
-        // initialize the health bar
-        if (player.IsLocal)
-            me = this;
-        else
-            rig.isKinematic = true;
-
-        GameManager.instance.players[id - 1] = this;
-
-        // initialize the health bar
-        headerInfo.Initialize(player.NickName, maxHp);
     }
 
     [PunRPC]

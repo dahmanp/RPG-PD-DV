@@ -44,13 +44,10 @@ public class Enemy : MonoBehaviourPun
             return;
         if (targetPlayer != null)
         {
-            // calculate the distance
             float dist = Vector3.Distance(transform.position, targetPlayer.transform.position);
 
-            // if we're able to attack, do so
             if (dist < attackRange && Time.time - lastAttackTime >= attackRange)
                 Attack();
-            // otherwise, do we move after the player?
             else if (dist > attackRange)
             {
                 Vector3 dir = targetPlayer.transform.position - transform.position;
@@ -64,23 +61,19 @@ public class Enemy : MonoBehaviourPun
         DetectPlayer();
     }
 
-    // attacks the targeted player
     void Attack()
     {
         lastAttackTime = Time.time;
         targetPlayer.photonView.RPC("TakeDamage", targetPlayer.photonPlayer, damage);
     }
 
-    // updates the targeted player
     void DetectPlayer()
     {
         if (Time.time - lastPlayerDetectTime > playerDetectRate)
         {
             lastPlayerDetectTime = Time.time;
-            // loop through all the players
             foreach (PlayerController player in GameManager.instance.players)
             {
-                // calculate distance between us and the player
                 float dist = Vector2.Distance(transform.position, player.transform.position);
                 if (player == targetPlayer)
                 {
@@ -100,7 +93,6 @@ public class Enemy : MonoBehaviourPun
     public void TakeDamage(int damage)
     {
         curHp -= damage;
-        // update the health bar
         healthBar.photonView.RPC("UpdateHealthBar", RpcTarget.All, curHp);
         if (curHp <= 0)
             Die();
@@ -126,7 +118,6 @@ public class Enemy : MonoBehaviourPun
     {
         if (objectToSpawnOnDeath != string.Empty)
             PhotonNetwork.Instantiate(objectToSpawnOnDeath, transform.position, Quaternion.identity);
-        // destroy the object across the network
         PhotonNetwork.Destroy(gameObject);
     }
 }

@@ -30,8 +30,8 @@ public class GameManager : MonoBehaviourPun
 
     void Start()
     {
-        photonView.RPC("ImInGame", RpcTarget.AllBuffered);
         players = new PlayerController[PhotonNetwork.PlayerList.Length];
+        photonView.RPC("ImInGame", RpcTarget.AllBuffered);
     }
 
     void SpawnPlayer()
