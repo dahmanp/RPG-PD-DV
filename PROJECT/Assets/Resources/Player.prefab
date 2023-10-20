@@ -316,7 +316,7 @@ MonoBehaviour:
   maxHp: 100
   dead: 0
   damage: 10
-  attackRange: 1
+  attackRange: 100
   attackRate: 0.2
   rig: {fileID: 4900173184353688371}
   sr: {fileID: 3400157774741954975}

@@ -45,9 +45,13 @@ public class Enemy : MonoBehaviourPun
         if (targetPlayer != null)
         {
             float dist = Vector3.Distance(transform.position, targetPlayer.transform.position);
+            //Debug.Log("Works");
 
-            if (dist < attackRange && Time.time - lastAttackTime >= attackRange)
+            if (dist < attackRange && Time.time - lastAttackTime >= attackRate)
+            {
+                //Debug.Log("Works");
                 Attack();
+            }
             else if (dist > attackRange)
             {
                 Vector3 dir = targetPlayer.transform.position - transform.position;
@@ -63,8 +67,10 @@ public class Enemy : MonoBehaviourPun
 
     void Attack()
     {
+        //Debug.Log("Works");
         lastAttackTime = Time.time;
         targetPlayer.photonView.RPC("TakeDamage", targetPlayer.photonPlayer, damage);
+
     }
 
     void DetectPlayer()
@@ -92,6 +98,7 @@ public class Enemy : MonoBehaviourPun
     [PunRPC]
     public void TakeDamage(int damage)
     {
+        //Debug.Log("Works");
         curHp -= damage;
         healthBar.photonView.RPC("UpdateHealthBar", RpcTarget.All, curHp);
         if (curHp <= 0)
